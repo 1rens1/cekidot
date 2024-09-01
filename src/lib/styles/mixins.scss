@@ -1,0 +1,35 @@
+@mixin text-gradient($gradient) {
+	background: linear-gradient($gradient);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	color: transparent;
+}
+
+@mixin is-mobile {
+	@media screen and (max-width: $mobile-width) {
+		@content;
+	}
+}
+
+@mixin is-not-mobile {
+	@media screen and (min-width: #{$mobile-width + 1px}) {
+		@content;
+	}
+}
+
+@mixin theme($theme) {
+	@if $theme == 'dark' {
+		:global(html[data-theme='dark']) {
+			@content;
+		}
+	} @else {
+		:global(html:not([data-theme='dark'])) {
+			@content;
+		}
+	}
+}
+
+@function theme($theme-name, $property) {
+	@return map-get(map-get($themes, $theme-name), $property);
+}

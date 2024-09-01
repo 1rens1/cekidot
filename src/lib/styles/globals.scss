@@ -1,0 +1,116 @@
+@import 'vars.scss';
+@import 'fonts/geist.scss';
+
+:root {
+	--sans-serif-fallback: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+		Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	--sans-serif: 'Geist', var(--sans-serif-fallback);
+	--monospace: 'Geist Mono', monospace;
+}
+
+html,
+body {
+	overflow-x: hidden;
+}
+
+body {
+	font-family: var(--sans-serif);
+	position: relative;
+	margin: 0;
+	min-height: 100vh;
+}
+
+body,
+.colorstransition {
+	transition: {
+		duration: 0.2s;
+		timing-function: ease;
+		property: color, background-color, border-color;
+	}
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	-webkit-tap-highlight-color: rgba(#07f, 0.2);
+}
+
+::selection {
+	background-color: color-mix(
+		in srgb,
+		color-mix(in srgb, var(--theme-primary), #fff 30%) 40%,
+		transparent
+	);
+}
+
+@each $theme, $properties in $themes {
+	$selector: 'html[data-theme=' + $theme + ']';
+	@if $theme == light {
+		$selector: 'html';
+	}
+	#{$selector} {
+		@if str-index($theme, 'dark') {
+			color-scheme: dark;
+		} @else {
+			color-scheme: light;
+		}
+
+		@each $property, $value in $properties {
+			--theme-#{$property}: #{theme($theme, $property)};
+		}
+	}
+}
+
+body {
+	background-color: var(--theme-background);
+	color: var(--theme-text);
+}
+
+picture:has(.emoji) {
+	width: 1em;
+	height: 1em;
+}
+
+.heading {
+	font-family: var(--serif-display);
+	font-size: 64px;
+	letter-spacing: -0.05em;
+
+	@include is-mobile {
+		font-size: 48px;
+	}
+}
+
+select {
+	background-color: rgba(#888, 0.2);
+	border: 1px solid rgba(#888, 0.4);
+	border-radius: 8px;
+	font: inherit;
+	padding: 4px 8px;
+
+	&:focus {
+		outline: 2px solid color-mix(in srgb, var(--theme-primary) 50%, transparent);
+	}
+
+	option {
+		background-color: var(--theme-background);
+		color: var(--theme-text);
+	}
+}
+
+a.underline-anchor {
+	position: relative;
+	color: currentColor;
+	text-decoration: none;
+
+	&:hover::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 1px;
+		background-color: currentColor;
+		left: 0;
+		bottom: 0;
+	}
+}
