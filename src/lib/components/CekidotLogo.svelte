@@ -1,4 +1,4 @@
-<svg width="45" height="5" viewBox="0 0 45 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="45" height="5" viewBox="0 0 45 5" fill="none" xmlns="http://www.w3.org/2000/svg" class="cekidot-logo">
 	<path
 		fill-rule="evenodd"
 		clip-rule="evenodd"
@@ -9,15 +9,15 @@
 		fill-rule="evenodd"
 		clip-rule="evenodd"
 		d="M30 0V1H31V4H30V5H25V0H30ZM27 4H29V1H27V4Z"
-		fill="#0DC922"
+		fill="var(--theme-primary)"
 	/>
 	<path
 		fill-rule="evenodd"
 		clip-rule="evenodd"
 		d="M33 0H37V1H38V4H37V5H33V4H32V1H33V0ZM35 4C35.8284 4 36.5 3.32843 36.5 2.5C36.5 1.67157 35.8284 1 35 1C34.1716 1 33.5 1.67157 33.5 2.5C33.5 3.32843 34.1716 4 35 4Z"
-		fill="#0DC922"
+		fill="var(--theme-primary)"
 	/>
-	<path d="M41 1H39V0H45V1H43V5H41V1Z" fill="#0DC922" />
+	<path d="M41 1H39V0H45V1H43V5H41V1Z" fill="var(--theme-primary)" />
 </svg>
 
 <style lang="scss">

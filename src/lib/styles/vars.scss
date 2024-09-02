@@ -2,14 +2,18 @@
 
 $themes: (
 	light: (
-		text: #000000,
-		background: #ffffff,
-		primary: #0DC922,
+		text: rgb(8, 4, 32),
+		background: rgb(236, 235, 250),
+		primary: rgb(47, 39, 206),
+		secondary: rgb(246, 159, 101),
+		accent: rgb(196, 28, 109)
 	),
 	dark: (
-		text: #ffffff,
-		background: #000000,
-		primary: #0DC922,
+		text: rgb(227, 223, 251),
+		background: rgb(6, 5, 20),
+		primary: rgb(58, 49, 216),
+		secondary: rgb(154, 67, 9),
+		accent: rgb(227, 59, 140)
 	)
 );
 
