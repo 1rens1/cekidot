@@ -6,6 +6,8 @@
 
 <style lang="scss">
 	button {
+		$inset: 8px;
+
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -14,10 +16,9 @@
 		font-size: 24px;
 		background: var(--theme-primary);
 		color: #fff;
-		$inset: 8px;
 		width: 64px - ($inset * 2);
 		height: 64px - ($inset * 2);
-		margin-right: $inset;
+		margin-right: $inset - 1px;
 		border: none;
 		border-radius: 100%;
 		cursor: pointer;

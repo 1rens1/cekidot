@@ -1,2 +1,10 @@
 export const themes = ['dark', 'light'];
-export const days = ['senin', 'selasa', 'rabu', 'kamis', 'jumat'] as const;
+
+export const isValidUrl = (url: string) => {
+	try {
+		return Boolean(new URL(url));
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	} catch (e) {
+		return false;
+	}
+};

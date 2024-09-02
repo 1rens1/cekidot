@@ -1,4 +1,11 @@
-<svg width="45" height="5" viewBox="0 0 45 5" fill="none" xmlns="http://www.w3.org/2000/svg" class="cekidot-logo">
+<svg
+	width="45"
+	height="5"
+	viewBox="0 0 45 5"
+	fill="none"
+	xmlns="http://www.w3.org/2000/svg"
+	class="cekidot-logo"
+>
 	<path
 		fill-rule="evenodd"
 		clip-rule="evenodd"
@@ -22,12 +29,21 @@
 
 <style lang="scss">
 	@import 'vars';
-	svg{
+	svg {
 		--_others: #000000;
 		width: 37px * 10;
 		height: 5px * 10;
-		@include theme('dark') {
-			--others: #ffffff;
+		$root: &;
+		@at-root {
+			@include theme('dark') {
+				#{$root} {
+					--_others: #ffffff;
+				}
+			}
+		}
+
+		&, * {
+			transition: 0.2s ease;
 		}
 	}
 </style>
