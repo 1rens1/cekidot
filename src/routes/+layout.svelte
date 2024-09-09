@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Footer from '$lib/components/Footer.svelte';
+	import Toaster from '$lib/components/Toaster.svelte';
 	import '$lib/styles/globals.scss';
 </script>
 
@@ -8,6 +9,7 @@
 </svelte:head>
 
 <div class="root">
+	<Toaster />
 	<main>
 		<slot />
 	</main>

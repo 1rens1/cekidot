@@ -67,21 +67,6 @@ body {
 	color: var(--theme-text);
 }
 
-picture:has(.emoji) {
-	width: 1em;
-	height: 1em;
-}
-
-.heading {
-	font-family: var(--serif-display);
-	font-size: 64px;
-	letter-spacing: -0.05em;
-
-	@include is-mobile {
-		font-size: 48px;
-	}
-}
-
 select {
 	background-color: rgba(#888, 0.2);
 	border: 1px solid rgba(#888, 0.4);
@@ -101,16 +86,27 @@ select {
 
 a.underline-anchor {
 	position: relative;
-	color: currentColor;
+	color: var(--theme-text);
 	text-decoration: none;
 
-	&:hover::before {
+	transition: 0.25s ease;
+
+	&::before {
 		content: '';
 		position: absolute;
 		width: 100%;
 		height: 1px;
-		background-color: currentColor;
+		background-color: var(--theme-text);
 		left: 0;
 		bottom: 0;
+		z-index: -1;
+		transition: 0.25s ease;
+	}
+
+	&:hover {
+		color: var(--theme-background);
+		&::before {
+			height: 100%;
+		}
 	}
 }

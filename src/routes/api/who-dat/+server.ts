@@ -16,6 +16,6 @@ export async function GET({ url }) {
 			return json({ success: true, message: 'Url exists', statusCode: response.status });
 		else return json({ success: false, message: "Url doesn't exist", statusCode: response.status });
 	} catch (e) {
-		return json({ success: false, message: "Url doesn't exist", error: e });
+		return json({ success: false, message: "An unexpected error occured", error: e });
 	}
 }
