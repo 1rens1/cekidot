@@ -4,9 +4,6 @@
 </script>
 
 <div class="wrapper">
-	<!-- <div
-		style="background-image: url(/carisa.jpg); width: 200px; height: 200px; background-size: cover; border-radius: 20px; position: fixed; top: 200px; left: 200px;"
-	></div> -->
 	<div class="container">
 		<CekidotLogo />
 		<div class="control">

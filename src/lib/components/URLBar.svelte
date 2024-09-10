@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import SubmitButton from '$lib/Home/SubmitButton.svelte';
+	import SubmitButton from '$lib/components/SubmitButton.svelte';
 	import { addToast } from '$lib/stores';
-	import { isValidUrl } from '$lib/utils';
 	import type { EventHandler } from 'svelte/elements';
 
 	export let value = '';
 	export let loading = false;
+	export let error = false;
+
+	let inputElement: HTMLInputElement;
 
 	const handleSubmit: EventHandler<SubmitEvent, HTMLFormElement> = async (e) => {
 		if (loading) return;
@@ -23,10 +25,6 @@
 			url = 'https://' + url;
 		}
 
-		if (!isValidUrl(url)) {
-			return;
-		}
-		
 		loading = true;
 
 		const request = await fetch('/api/existance?' + new URLSearchParams({ url }));
@@ -37,13 +35,24 @@
 			goto('/' + encodeURIComponent(url));
 		} else {
 			addToast({ type: 'error', title: response.message });
+			error = true;
+			inputElement.focus();
 		}
 	};
 </script>
 
-<form data-colorstransition on:submit|preventDefault={handleSubmit}>
+<form data-colorstransition on:submit|preventDefault={handleSubmit} class:error>
 	<!-- svelte-ignore a11y-autofocus -->
-	<input type="text" placeholder="example-page.com" name="url" autofocus {value} />
+	<input
+		type="text"
+		placeholder="example-page.com"
+		name="url"
+		autofocus
+		required
+		bind:this={inputElement}
+		{value}
+		on:input={() => (error = false)}
+	/>
 	<SubmitButton {loading} />
 </form>
 
@@ -72,6 +81,13 @@
 			font: inherit;
 			background: none;
 			padding: 0 24px;
+			transition: 0.1s ease;
+		}
+	}
+
+	.error {
+		input {
+			color: #f00;
 		}
 	}
 </style>

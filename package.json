@@ -33,7 +33,9 @@
 	"type": "module",
 	"dependencies": {
 		"@formkit/auto-animate": "^0.8.2",
+		"@iconify-json/ant-design": "^1.2.0",
 		"@iconify-json/tabler": "^1.2.0",
+		"bits-ui": "^0.21.13",
 		"date-fns": "^3.6.0",
 		"parse-domain": "^8.2.2",
 		"sass": "^1.77.8",
