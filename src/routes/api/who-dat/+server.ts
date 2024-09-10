@@ -1,21 +1,40 @@
-import { isValidUrl } from '$lib/utils.js';
 import { json } from '@sveltejs/kit';
+import { parseDomain, ParseResultType } from 'parse-domain';
 
 export async function GET({ url }) {
 	try {
-		const targetUrl = url.searchParams.get('url');
-		if (!targetUrl) return json({ success: false, message: 'Url param required' });
-		if (!isValidUrl(targetUrl)) return json({ success: false, message: 'Invalid url' });
+		const targetHostname = url.searchParams.get('hostname');
+		if (!targetHostname)
+			return json({ success: false, message: 'Hostname required' }, { status: 400 });
 
-		const headRequest = fetch(targetUrl, { method: 'HEAD' });
-		const getRequest = fetch(targetUrl, { method: 'GET' });
+		const parsed = parseDomain(targetHostname);
 
-		const response = await Promise.race([headRequest, getRequest]);
+		if (parsed.type !== ParseResultType.Listed)
+			return json(
+				{ success: false, message: 'Cannot parse domain from hostname: ' + targetHostname },
+				{ status: 404 }
+			);
 
-		if (response.ok)
-			return json({ success: true, message: 'Url exists', statusCode: response.status });
-		else return json({ success: false, message: "Url doesn't exist", statusCode: response.status });
+		const domain = [parsed.icann.domain, ...parsed.icann.topLevelDomains].join(".");
+
+		const request = await fetch('https://who-dat.as93.net/' + domain);
+
+		if (!request.ok)
+			return json(
+				{ success: false, message: 'No whois server found for domain: ' + domain },
+				{ status: 404 }
+			);
+
+		const response = await request.json();
+
+		return json(
+			{ success: true, data: response },
+			{ headers: { 'Cache-Control': 'public, max-age=' + 60 * 60 * 24 } }
+		);
 	} catch (e) {
-		return json({ success: false, message: "An unexpected error occured", error: e });
+		return json(
+			{ success: false, message: 'An unexpected error occured', error: e },
+			{ status: 500 }
+		);
 	}
 }

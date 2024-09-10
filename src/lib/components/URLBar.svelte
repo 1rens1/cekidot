@@ -34,7 +34,7 @@
 		loading = false;
 
 		if (response.success) {
-			goto('/' + url);
+			goto('/' + encodeURIComponent(url));
 		} else {
 			addToast({ type: 'error', title: response.message });
 		}

@@ -110,3 +110,31 @@ a.underline-anchor {
 		}
 	}
 }
+
+.skeleton {
+	border-radius: 4px;
+	height: 1em;
+	background-color: rgba(#ccc, 0.2);
+	position: relative;
+	overflow: hidden;
+
+	&::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-image: linear-gradient(to right, transparent, rgba(#ccc, 0.2), transparent);
+		animation: shimmer 2s ease-in-out infinite;
+		
+		@keyframes shimmer {
+			from {
+				transform: translateX(-100%);
+			}
+			to {
+				transform: translateX(100%);
+			}
+		}
+	}
+}

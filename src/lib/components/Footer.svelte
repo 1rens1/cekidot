@@ -6,7 +6,7 @@
 	<div class="container">
 		<div class="bottom">
 			<div class="credit">
-				<span style="font-family: 'Geist Mono'; font-weight: 800;">CEKIDOT</span> is a software by
+				<span style="font-family: 'Geist Mono'; font-weight: 800;">CEKIDOT</span> is a software by &copy;
 				<a
 					href="https://rens.vercel.app/"
 					target="_blank"
