@@ -7,6 +7,7 @@
 	import TablerAlertTriangle from '~icons/tabler/alert-triangle';
 	import TablerMail from '~icons/tabler/mail';
 	import AntDesignQuestionCircleOutlined from '~icons/ant-design/question-circle-outlined';
+	import CekidotLogo from '$lib/components/CekidotLogo.svelte';
 
 	$: urlPath = $page.params.url;
 	$: url = new URL($page.params.url);
@@ -72,11 +73,14 @@
 </script>
 
 <div class="wrapper">
-	<div class="container" style="padding-bottom: 0;">
+	<header class="container" style="padding-bottom: 0;">
+		<a href="/" class="logo">
+			<CekidotLogo width={45 * 5} height={5 * 5} />
+		</a>
 		<div class="control">
 			<UrlBar bind:value={urlPath} />
 		</div>
-	</div>
+	</header>
 	<div class="container" style="padding-bottom: 0;">
 		<h1 class="hostname">
 			{#key url.hostname}
@@ -134,7 +138,19 @@
 </div>
 
 <style lang="scss">
-	.wrapper {
+	header {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		
+		.logo {
+			padding: 8px;
+		}
+
+		.control {
+			flex-grow: 1;
+		}
 	}
 	.container {
 		padding: 32px;

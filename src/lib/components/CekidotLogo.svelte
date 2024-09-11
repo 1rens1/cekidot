@@ -1,6 +1,11 @@
+<script lang="ts">
+	export let width = 450;
+	export let height = 50;
+</script>
+
 <svg
-	width="45"
-	height="5"
+	{width}
+	{height}
 	viewBox="0 0 45 5"
 	fill="none"
 	xmlns="http://www.w3.org/2000/svg"
@@ -31,8 +36,6 @@
 	@import 'vars';
 	svg {
 		--_others: #000000;
-		width: 37px * 10;
-		height: 5px * 10;
 		$root: &;
 		@at-root {
 			@include theme('dark') {
@@ -42,7 +45,8 @@
 			}
 		}
 
-		&, * {
+		&,
+		* {
 			transition: 0.2s ease;
 		}
 	}
