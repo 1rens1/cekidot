@@ -1,14 +1,26 @@
 import type { Handler } from '@netlify/functions';
 import chromium from 'chrome-aws-lambda';
 
+export const isValidUrl = (url: string) => {
+	try {
+		return Boolean(new URL(url));
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	} catch (e) {
+		return false;
+	}
+};
+
 export const handler: Handler = async (event) => {
 	try {
-		const pageToScreenshot = JSON.parse(event.body).pageToScreenshot;
+		const targetUrl = JSON.parse(event.body!).url as string;
 
-		if (!pageToScreenshot)
+		if (!isValidUrl(targetUrl))
 			return {
 				statusCode: 400,
-				body: JSON.stringify({ message: 'Page URL not defined' })
+				body: JSON.stringify({
+					success: false,
+					message: 'Invalid url'
+				})
 			};
 
 		const browser = await chromium.puppeteer.launch({
@@ -20,7 +32,7 @@ export const handler: Handler = async (event) => {
 
 		const page = await browser.newPage();
 
-		await page.goto(pageToScreenshot, { waitUntil: 'networkidle2' });
+		await page.goto(targetUrl, { waitUntil: 'networkidle2' });
 
 		const screenshot = await page.screenshot({ encoding: 'binary' });
 
@@ -29,7 +41,8 @@ export const handler: Handler = async (event) => {
 		return {
 			statusCode: 200,
 			body: JSON.stringify({
-				message: `Complete screenshot of ${pageToScreenshot}`,
+				success: true,
+				message: `Complete screenshot of ${targetUrl}`,
 				buffer: screenshot
 			})
 		};
@@ -37,7 +50,8 @@ export const handler: Handler = async (event) => {
 		return {
 			statusCode: 400,
 			body: JSON.stringify({
-				message: ''
+				success: false,
+				message: 'An unexpected error occurred'
 			})
 		};
 	}
