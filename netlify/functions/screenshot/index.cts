@@ -1,7 +1,7 @@
 import type { Handler } from '@netlify/functions';
 import chromium from 'chrome-aws-lambda';
 
-export const isValidUrl = (url: string) => {
+const isValidUrl = (url: string) => {
 	try {
 		return Boolean(new URL(url));
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -11,21 +11,26 @@ export const isValidUrl = (url: string) => {
 };
 
 export const handler: Handler = async (event) => {
+	if (event.httpMethod !== 'POST')
+		return {
+			statusCode: 405,
+			body: JSON.stringify({
+				success: false,
+				message: 'Method not allowed'
+			})
+		};
 	try {
 		const targetUrl = JSON.parse(event.body!).url as string;
 
 		if (!isValidUrl(targetUrl))
 			return {
 				statusCode: 400,
-				body: JSON.stringify({
-					success: false,
-					message: 'Invalid url'
-				})
+				body: JSON.stringify({ success: false, message: 'Invalid url' })
 			};
 
 		const browser = await chromium.puppeteer.launch({
 			args: chromium.args,
-			defaultViewport: chromium.defaultViewport,
+			defaultViewport: { ...chromium.defaultViewport, width: 800, height: 600 },
 			executablePath: await chromium.executablePath,
 			headless: chromium.headless
 		});
@@ -41,17 +46,16 @@ export const handler: Handler = async (event) => {
 		return {
 			statusCode: 200,
 			body: JSON.stringify({
-				success: true,
 				message: `Complete screenshot of ${targetUrl}`,
 				buffer: screenshot
 			})
 		};
-	} catch (e) {
+	} catch {
 		return {
 			statusCode: 400,
 			body: JSON.stringify({
 				success: false,
-				message: 'An unexpected error occurred'
+				message: 'An unexpected error occured'
 			})
 		};
 	}

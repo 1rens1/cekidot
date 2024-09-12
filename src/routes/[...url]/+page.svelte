@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import CekidotLogo from '$lib/components/CekidotLogo.svelte';
 	import UrlBar from '$lib/components/URLBar.svelte';
 	import { addToast } from '$lib/stores';
 	import { format } from 'date-fns';
 	import { formatDistanceToNowStrict } from 'date-fns/formatDistanceToNowStrict';
 	import TablerAlertTriangle from '~icons/tabler/alert-triangle';
 	import TablerMail from '~icons/tabler/mail';
-	import AntDesignQuestionCircleOutlined from '~icons/ant-design/question-circle-outlined';
-	import CekidotLogo from '$lib/components/CekidotLogo.svelte';
+	import Screenshot from './Screenshot.svelte';
 
 	$: urlPath = $page.params.url;
 	$: url = new URL($page.params.url);
@@ -84,42 +84,53 @@
 	<div class="container" style="padding-bottom: 0;">
 		<h1 class="hostname">
 			{#key url.hostname}
-				<img src="https://favicone.com/{url.hostname}?s=32" alt={url.hostname} />
+				<img
+					src="https://www.google.com/s2/favicons?domain={url.hostname}&sz=32"
+					alt={url.hostname}
+				/>
 			{/key}
 			{url.hostname}
 		</h1>
 	</div>
 	<div class="container">
-		{#if whoIsData}
-			<div class="box">
-				<h2 style="margin: 0;">Domain: {whoIsData.domain.domain}</h2>
-				<div>Registered</div>
-				<div style="margin-left: 1em;">
-					<div>
-						at {format(whoIsData.domain.created_date, 'PPP')} ({formatDistanceToNowStrict(
-							whoIsData.domain.created_date
-						)})
+		<div class="section s1">
+			{#if whoIsData}
+				<div class="box">
+					<h2 style="margin: 0;">Domain: {whoIsData.domain.domain}</h2>
+					<div>Registered</div>
+					<div style="margin-left: 1em;">
+						<div>
+							at {format(whoIsData.domain.created_date, 'PPP')} ({formatDistanceToNowStrict(
+								whoIsData.domain.created_date
+							)})
+						</div>
+						<div>by {whoIsData.registrar.name}</div>
 					</div>
-					<div>by {whoIsData.registrar.name}</div>
 				</div>
-			</div>
-		{:else}
-			<div class="box">
-				<div class="skeleton" style="max-width: 400px; margin-bottom: 8px; font-size: 24px;"></div>
-				<div
-					class="skeleton"
-					style="max-width: 500px; height: calc(1em-8px); margin-bottom: 8px;"
-				></div>
-				<div
-					class="skeleton"
-					style="max-width: 500px; height: calc(1em-8px); margin-bottom: 8px;"
-				></div>
-				<div
-					class="skeleton"
-					style="max-width: 500px; height: calc(1em-8px); margin-bottom: 8px;"
-				></div>
-			</div>
-		{/if}
+			{:else}
+				<div class="box">
+					<div
+						class="skeleton"
+						style="max-width: 400px; margin-bottom: 8px; font-size: 24px;"
+					></div>
+					<div
+						class="skeleton"
+						style="max-width: 500px; height: calc(1em-8px); margin-bottom: 8px;"
+					></div>
+					<div
+						class="skeleton"
+						style="max-width: 500px; height: calc(1em-8px); margin-bottom: 8px;"
+					></div>
+					<div
+						class="skeleton"
+						style="max-width: 500px; height: calc(1em-8px); margin-bottom: 8px;"
+					></div>
+				</div>
+			{/if}
+		</div>
+	</div>
+	<div class="container">
+		<Screenshot url={urlPath} />
 		<div style="padding-top: 24px; display: flex; gap: 8px;">
 			<div
 				style="background-color: var(--theme-primary); color: var(--theme-background); padding: 24px; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 8px;"
@@ -133,7 +144,7 @@
 				<TablerMail />
 				Report Abuse Email
 			</div>
-		</div>
+	</div>
 	</div>
 </div>
 
@@ -143,7 +154,7 @@
 		align-items: center;
 		justify-content: center;
 		gap: 8px;
-		
+
 		.logo {
 			padding: 8px;
 		}
@@ -167,5 +178,9 @@
 		border-radius: 32px;
 		padding: 32px;
 		border: 1px solid #777;
+	}
+
+	.s1 {
+		display: flex;
 	}
 </style>
