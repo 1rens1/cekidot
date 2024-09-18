@@ -1,6 +1,7 @@
 import type { Handler } from '@netlify/functions';
 import puppeteer from 'puppeteer-core';
-import {config}
+import { config } from 'dotenv';
+config();
 
 const isValidUrl = (url: string) => {
 	try {
@@ -30,10 +31,8 @@ export const handler: Handler = async (event) => {
 			};
 
 		const browser = await puppeteer.connect({
-			args: chromium.args,
-			defaultViewport: { ...chromium.defaultViewport, width: 800, height: 600 },
-			executablePath: await chromium.executablePath,
-			headless: chromium.headless
+			browserWSEndpoint: process.env.CHROME_WS_ENDPOINT,
+			defaultViewport: { width: 800, height: 600 }
 		});
 
 		const page = await browser.newPage();
