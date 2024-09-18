@@ -3,7 +3,7 @@ command = "bun run build"
 publish = "build"
 
 [dev]
-command = "vite dev"
+command = "bun dev"
 
 [functions]
 directory = "netlify/functions"

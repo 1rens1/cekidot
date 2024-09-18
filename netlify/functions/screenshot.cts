@@ -1,5 +1,6 @@
 import type { Handler } from '@netlify/functions';
-import chromium from 'chrome-aws-lambda';
+import puppeteer from 'puppeteer-core';
+import {config}
 
 const isValidUrl = (url: string) => {
 	try {
@@ -28,7 +29,7 @@ export const handler: Handler = async (event) => {
 				body: JSON.stringify({ success: false, message: 'Invalid url' })
 			};
 
-		const browser = await chromium.puppeteer.launch({
+		const browser = await puppeteer.connect({
 			args: chromium.args,
 			defaultViewport: { ...chromium.defaultViewport, width: 800, height: 600 },
 			executablePath: await chromium.executablePath,
@@ -50,12 +51,14 @@ export const handler: Handler = async (event) => {
 				buffer: screenshot
 			})
 		};
-	} catch {
+	} catch (e) {
+		console.log(e);
 		return {
 			statusCode: 400,
 			body: JSON.stringify({
 				success: false,
-				message: 'An unexpected error occured'
+				message: 'An unexpected error occured',
+				error: e
 			})
 		};
 	}

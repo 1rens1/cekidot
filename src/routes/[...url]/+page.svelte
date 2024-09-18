@@ -51,7 +51,7 @@
 
 	let whoIsData: WhoIsData | undefined;
 
-	$: fetchWhoIsData(url.host);
+	$: if (typeof window !== 'undefined' && window) fetchWhoIsData(url.host);
 
 	async function fetchWhoIsData(hostname: string) {
 		if (!hostname) return;
@@ -93,29 +93,39 @@
 		</h1>
 	</div>
 	<div class="container">
+		<h2 class="legend">
+			Who is <span style="color: var(--theme-secondary)">{url.hostname}</span>?
+		</h2>
 		<div class="section s1">
-			{#if whoIsData}
-				<div class="box">
-					<h2 style="margin: 0;">Domain: {whoIsData.domain.domain}</h2>
+			<div class="box">
+				{#if whoIsData}
+					<h3 style="margin: 0;">
+						<span style="font-weight: 600;">Domain:</span>
+						{whoIsData.domain.domain}
+					</h3>
 					<div>Registered</div>
 					<div style="margin-left: 1em;">
 						<div>
-							at {format(whoIsData.domain.created_date, 'PPP')} ({formatDistanceToNowStrict(
-								whoIsData.domain.created_date
-							)})
+							at {format(whoIsData.domain.created_date, 'PPP')} (<strong
+								>{formatDistanceToNowStrict(whoIsData.domain.created_date)}</strong
+							>)
 						</div>
 						<div>by {whoIsData.registrar.name}</div>
 					</div>
-				</div>
-			{:else}
-				<div class="box">
+					{#if whoIsData.registrant.organization}
+						<h3 style="margin: 0;margin-top: 0.5em;">
+							<span style="font-weight: 600;">Organization:</span>
+							{whoIsData.registrant.organization}
+						</h3>
+					{/if}
+				{:else}
 					<div
 						class="skeleton"
 						style="max-width: 400px; margin-bottom: 8px; font-size: 24px;"
 					></div>
 					<div
 						class="skeleton"
-						style="max-width: 500px; height: calc(1em-8px); margin-bottom: 8px;"
+						style="max-width: 250px; height: calc(1em-8px); margin-bottom: 8px;"
 					></div>
 					<div
 						class="skeleton"
@@ -125,12 +135,18 @@
 						class="skeleton"
 						style="max-width: 500px; height: calc(1em-8px); margin-bottom: 8px;"
 					></div>
-				</div>
-			{/if}
+					<div
+						class="skeleton"
+						style="max-width: 300px; margin-bottom: 8px; font-size: 24px;"
+					></div>
+				{/if}
+			</div>
+			<div class="box screenshot">
+				<Screenshot url={urlPath} />
+			</div>
 		</div>
 	</div>
 	<div class="container">
-		<Screenshot url={urlPath} />
 		<div style="padding-top: 24px; display: flex; gap: 8px;">
 			<div
 				style="background-color: var(--theme-primary); color: var(--theme-background); padding: 24px; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 8px;"
@@ -144,11 +160,12 @@
 				<TablerMail />
 				Report Abuse Email
 			</div>
-	</div>
+		</div>
 	</div>
 </div>
 
 <style lang="scss">
+	@import 'vars';
 	header {
 		display: flex;
 		align-items: center;
@@ -168,6 +185,20 @@
 		max-width: 1200px;
 		width: 100%;
 		margin: auto;
+
+		.legend {
+			font-size: 32px;
+			margin-top: 0;
+			margin-bottom: 0.5em;
+			color: color-mix(
+				in srgb,
+				var(--theme-text) 80%,
+				color-mix(in srgb, var(--theme-primary) 50%, var(--theme-background)) 20%
+			);
+			@include is-mobile {
+				font-size: 24px;
+			}
+		}
 	}
 	.hostname {
 		margin: 0;
@@ -178,9 +209,27 @@
 		border-radius: 32px;
 		padding: 32px;
 		border: 1px solid #777;
+		position: relative;
+
+		.legend {
+		}
+	}
+
+	.screenshot {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.s1 {
 		display: flex;
+		gap: 16px;
+
+		@include is-mobile {
+			flex-direction: column;
+		}
+		:first-child {
+			flex-grow: 1;
+		}
 	}
 </style>

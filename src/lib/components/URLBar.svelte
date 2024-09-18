@@ -36,7 +36,7 @@
 		} else {
 			addToast({ type: 'error', title: response.message });
 			error = true;
-			inputElement.focus();
+			inputElement.select();
 		}
 	};
 </script>
