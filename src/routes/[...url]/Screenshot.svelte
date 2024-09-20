@@ -39,12 +39,15 @@
 		<div
 			class="modal-wrapper"
 			on:click={() => (modalOpened = false)}
-			in:fade={{ duration: 100 }}
+			in:fade={{ duration: 200 }}
 			out:fade={{ duration: 50 }}
 		>
-			<div class="modal-container" transition:scale={{ duration: 100, start: 0.9 }}>
+			<div class="modal-container" transition:scale={{ duration: 200, start: 0.9 }}>
 				<div class="url-bar">
-					<TablerWorld /> <span>{url.repeat(6)}</span>
+					<TablerWorld />
+					<span>
+						{url}
+					</span>
 				</div>
 				<img class="modal-image" src={screenshotUrl} alt="screenshot preview" draggable="false" />
 			</div>
@@ -61,13 +64,18 @@
 		aspect-ratio: 1/1;
 		width: 300px;
 		height: 100%;
-		border-radius: 8px;
-		cursor: zoom-in;
+		border-radius: 16px;
+		user-select: none;
 
 		@include is-mobile {
 			max-width: 300px;
 			width: 100%;
 		}
+	}
+
+	.image {
+		cursor: zoom-in;
+		border: 1px solid #777;
 	}
 
 	.modal-wrapper {
@@ -91,31 +99,48 @@
 			border-radius: 32px;
 			background-color: var(--theme-background);
 			box-shadow: 0 8px 16px rgba(#000, 0.25);
+			user-select: none;
+			$root: &;
+			@at-root {
+				@include theme('dark') {
+					#{$root} {
+						background-color: color-mix(
+							in srgb,
+							var(--theme-background) 90%,
+							var(--theme-text) 10%
+						);
+					}
+				}
+			}
 		}
 
 		.url-bar {
 			height: 32px;
 			margin: 16px;
+			padding: 0 8px;
+			gap: 8px;
 			border-radius: inherit;
 			border: 1px solid #777;
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			> :global(*) {
+				opacity: 0.8;
+			}
 			:global(svg) {
 				flex-shrink: 0;
 			}
-			
+
 			span {
-				flex-shrink: 1;
 				flex-grow: 1;
-				width: min-content;
+				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
 			}
 		}
 
 		.modal-image {
-			width: min(650px, 100%);
+			width: 100%;
 			border-bottom-left-radius: inherit;
 			border-bottom-right-radius: inherit;
 		}
