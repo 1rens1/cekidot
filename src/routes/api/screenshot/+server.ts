@@ -1,5 +1,5 @@
 import { isValidUrl } from '$lib/utils.js';
-import { json } from '@sveltejs/kit';
+import { json, text } from '@sveltejs/kit';
 
 export const POST = async ({ request, fetch }) => {
 	try {
@@ -7,15 +7,12 @@ export const POST = async ({ request, fetch }) => {
 
 		if (!isValidUrl(targetUrl)) return json({ success: false, message: 'Invalid url' });
 
-		const req = await fetch('/.netlify/functions/screenshot', {
-			method: 'POST',
-			body: JSON.stringify({ url: targetUrl })
-		});
+		const req = await fetch(
+			`https://v1.screenshot.11ty.dev/${encodeURIComponent(targetUrl)}/medium`
+		);
 
-		return json(await req.json(), {
-			headers: { 'Cache-Control': 'public, max-age=' + 60 * 60 * 24 }
-		});
+		return req;
 	} catch (e) {
-		return json({ success: false, message: 'An unexpected error occured', error: e });
+		return text(`An unexpected error occured, ${JSON.stringify(e)}`);
 	}
 };

@@ -13,18 +13,18 @@
 	$: url = new URL($page.params.url);
 
 	interface ContactInfo {
-		name?: string;
-		organization?: string;
-		street?: string;
-		city?: string;
-		province?: string;
-		postal_code?: string;
-		country?: string;
-		phone?: string;
-		phone_ext?: string;
-		fax?: string;
-		fax_ext?: string;
-		email?: string;
+		name: string;
+		organization: string;
+		street: string;
+		city: string;
+		province: string;
+		postal_code: string;
+		country: string;
+		phone: string;
+		phone_ext: string;
+		fax: string;
+		fax_ext: string;
+		email: string;
 	}
 
 	interface Domain {
@@ -41,15 +41,15 @@
 	}
 
 	interface WhoIsData {
-		domain: Domain;
-		registrar: ContactInfo;
-		registrant: ContactInfo;
-		administrative: ContactInfo;
-		technichal: ContactInfo;
-		billing: ContactInfo;
+		domain: Partial<Domain>;
+		registrar: Partial<ContactInfo>;
+		registrant: Partial<ContactInfo>;
+		administrative: Partial<ContactInfo>;
+		technichal: Partial<ContactInfo>;
+		billing: Partial<ContactInfo>;
 	}
 
-	let whoIsData: WhoIsData | undefined;
+	let whoIsData: Partial<WhoIsData> | undefined;
 
 	$: if (typeof window !== 'undefined' && window) fetchWhoIsData(url.host);
 
@@ -84,10 +84,7 @@
 	<div class="container" style="padding-bottom: 0;">
 		<h1 class="hostname">
 			{#key url.hostname}
-				<img
-					src="https://www.google.com/s2/favicons?domain={url.hostname}&sz=32"
-					alt={url.hostname}
-				/>
+				<img src="https://favicone.com/{url.hostname}?s=32" alt={url.hostname} />
 			{/key}
 			{url.hostname}
 		</h1>
@@ -99,23 +96,32 @@
 		<div class="section s1">
 			<div class="box">
 				{#if whoIsData}
-					<h3 style="margin: 0;">
-						<span style="font-weight: 600;">Domain:</span>
-						{whoIsData.domain.domain}
-					</h3>
-					<div>Registered</div>
-					<div style="margin-left: 1em;">
-						<div>
-							at {format(whoIsData.domain.created_date, 'PPP')} (<strong
-								>{formatDistanceToNowStrict(whoIsData.domain.created_date)}</strong
-							>)
+					{#if whoIsData.domain}
+						<h3 style="margin: 0;">
+							<span style="font-weight: 600;">Domain:</span>
+							{whoIsData.domain.domain}
+						</h3>
+						<div>Registered</div>
+						<div style="margin-left: 1em;">
+							<div>
+								at
+								{#if whoIsData.domain.created_date}
+									{format(whoIsData.domain.created_date, 'PPP')} (<strong
+										>{formatDistanceToNowStrict(whoIsData.domain.created_date)}</strong
+									>)
+								{:else}
+									???
+								{/if}
+							</div>
+							{#if whoIsData.registrar}
+								<div>by {whoIsData.registrar.name || '???'}</div>
+							{/if}
 						</div>
-						<div>by {whoIsData.registrar.name}</div>
-					</div>
-					{#if whoIsData.registrant.organization}
+					{/if}
+					{#if whoIsData.registrant}
 						<h3 style="margin: 0;margin-top: 0.5em;">
 							<span style="font-weight: 600;">Organization:</span>
-							{whoIsData.registrant.organization}
+							{whoIsData.registrant.organization || '???'}
 						</h3>
 					{/if}
 				{:else}
