@@ -8,6 +8,7 @@
 	import TablerAlertTriangle from '~icons/tabler/alert-triangle';
 	import TablerMail from '~icons/tabler/mail';
 	import Screenshot from './Screenshot.svelte';
+	import WhoDatFull from './WhoDatFull.svelte';
 
 	$: urlPath = $page.params.url;
 	$: url = new URL($page.params.url);
@@ -94,57 +95,62 @@
 			Who is <span style="color: var(--theme-secondary)">{url.hostname}</span>?
 		</h2>
 		<div class="section s1">
-			<div class="box">
-				{#if whoIsData}
-					{#if whoIsData.domain}
-						<h3 style="margin: 0;">
-							<span style="font-weight: 600;">Domain:</span>
-							{whoIsData.domain.domain}
-						</h3>
-						<div>Registered</div>
-						<div style="margin-left: 1em;">
-							<div>
-								at
-								{#if whoIsData.domain.created_date}
-									{format(whoIsData.domain.created_date, 'PPP')} (<strong
-										>{formatDistanceToNowStrict(whoIsData.domain.created_date)}</strong
-									>)
-								{:else}
-									???
+			<div class="box box-1">
+				<div class="inner">
+					{#if whoIsData}
+						{#if whoIsData.domain}
+							<h3 style="margin: 0;">
+								<span style="font-weight: 600;">Domain:</span>
+								{whoIsData.domain.domain}
+							</h3>
+							<div>Registered</div>
+							<div style="margin-left: 1em;">
+								<div>
+									at
+									{#if whoIsData.domain.created_date}
+										{format(whoIsData.domain.created_date, 'PPP')} (<strong
+											>{formatDistanceToNowStrict(whoIsData.domain.created_date)}</strong
+										>)
+									{:else}
+										???
+									{/if}
+								</div>
+								{#if whoIsData.registrar}
+									<div>by {whoIsData.registrar.name || '???'}</div>
 								{/if}
 							</div>
-							{#if whoIsData.registrar}
-								<div>by {whoIsData.registrar.name || '???'}</div>
-							{/if}
-						</div>
+						{/if}
+						{#if whoIsData.registrant}
+							<h3 style="margin: 0;margin-top: 0.5em;">
+								<span style="font-weight: 600;">Organization:</span>
+								{whoIsData.registrant.organization || '???'}
+							</h3>
+						{/if}
+					{:else}
+						<div
+							class="skeleton"
+							style="max-width: 400px; margin-bottom: 8px; font-size: 24px;"
+						></div>
+						<div
+							class="skeleton"
+							style="max-width: 250px; height: calc(1em-8px); margin-bottom: 8px;"
+						></div>
+						<div
+							class="skeleton"
+							style="max-width: 500px; height: calc(1em-8px); margin-bottom: 8px;"
+						></div>
+						<div
+							class="skeleton"
+							style="max-width: 500px; height: calc(1em-8px); margin-bottom: 8px;"
+						></div>
+						<div
+							class="skeleton"
+							style="max-width: 300px; margin-bottom: 8px; font-size: 24px;"
+						></div>
 					{/if}
-					{#if whoIsData.registrant}
-						<h3 style="margin: 0;margin-top: 0.5em;">
-							<span style="font-weight: 600;">Organization:</span>
-							{whoIsData.registrant.organization || '???'}
-						</h3>
-					{/if}
-				{:else}
-					<div
-						class="skeleton"
-						style="max-width: 400px; margin-bottom: 8px; font-size: 24px;"
-					></div>
-					<div
-						class="skeleton"
-						style="max-width: 250px; height: calc(1em-8px); margin-bottom: 8px;"
-					></div>
-					<div
-						class="skeleton"
-						style="max-width: 500px; height: calc(1em-8px); margin-bottom: 8px;"
-					></div>
-					<div
-						class="skeleton"
-						style="max-width: 500px; height: calc(1em-8px); margin-bottom: 8px;"
-					></div>
-					<div
-						class="skeleton"
-						style="max-width: 300px; margin-bottom: 8px; font-size: 24px;"
-					></div>
+				</div>
+				{#if whoIsData}
+					<WhoDatFull {whoIsData} />
 				{/if}
 			</div>
 			<div class="box screenshot">
@@ -192,6 +198,10 @@
 		width: 100%;
 		margin: auto;
 
+		@include is-mobile {
+			padding: 24px;
+		}
+
 		.legend {
 			font-size: 32px;
 			margin-top: 0;
@@ -221,6 +231,7 @@
 		}
 	}
 
+
 	.screenshot {
 		display: flex;
 		align-items: center;
@@ -229,12 +240,22 @@
 
 	.s1 {
 		display: flex;
-		gap: 16px;
+		gap: 32px;
 
 		@include is-mobile {
 			flex-direction: column;
 		}
-		:first-child {
+		> :first-child {
+			flex-grow: 1;
+		}
+	}
+
+	.box-1 {
+		display: flex;
+		flex-direction: column;
+		align-items: start;
+		gap: 16px;
+		.inner {
 			flex-grow: 1;
 		}
 	}

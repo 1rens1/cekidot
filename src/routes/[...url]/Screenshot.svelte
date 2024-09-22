@@ -1,10 +1,11 @@
 <script lang="ts">
+	import { expoOut } from 'svelte/easing';
 	import { fade, scale } from 'svelte/transition';
 	import TablerWorld from '~icons/tabler/world';
 
 	export let url: string;
 	let screenshotUrl: string | undefined;
-	let modalOpened = true;
+	let modalOpened = false;
 
 	const fetchScreenShot = async (target: string) => {
 		screenshotUrl = undefined;
@@ -39,10 +40,13 @@
 		<div
 			class="modal-wrapper"
 			on:click={() => (modalOpened = false)}
-			in:fade={{ duration: 200 }}
-			out:fade={{ duration: 50 }}
+			in:fade={{ duration: 500, easing: expoOut }}
+			out:fade={{ duration: 200, easing: expoOut }}
 		>
-			<div class="modal-container" transition:scale={{ duration: 200, start: 0.9 }}>
+			<div
+				class="modal-container"
+				transition:scale={{ duration: 500, start: 0.9, easing: expoOut }}
+			>
 				<div class="url-bar">
 					<TablerWorld />
 					<span>
@@ -89,17 +93,18 @@
 		z-index: 9999;
 		cursor: zoom-out;
 
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		display: grid;
+		place-items: center;
 		padding: 16px;
 
 		.modal-container {
 			width: min(650px, 100%);
 			border-radius: 32px;
 			background-color: var(--theme-background);
-			box-shadow: 0 8px 16px rgba(#000, 0.25);
+			box-shadow: 0 8px 16px rgba(#000, 0.5);
 			user-select: none;
+			display: flex;
+			flex-direction: column;
 			$root: &;
 			@at-root {
 				@include theme('dark') {
