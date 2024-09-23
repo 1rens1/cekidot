@@ -3,10 +3,14 @@
 	import CekidotLogo from '$lib/components/CekidotLogo.svelte';
 	import UrlBar from '$lib/components/URLBar.svelte';
 	import { addToast } from '$lib/stores';
+	import { Tooltip } from 'bits-ui';
 	import { format } from 'date-fns';
 	import { formatDistanceToNowStrict } from 'date-fns/formatDistanceToNowStrict';
+	import { differenceInYears } from 'date-fns/fp';
+	import { fade } from 'svelte/transition';
 	import TablerAlertTriangle from '~icons/tabler/alert-triangle';
 	import TablerMail from '~icons/tabler/mail';
+	import TablerExternalLink from '~icons/tabler/external-link';
 	import Screenshot from './Screenshot.svelte';
 	import WhoDatFull from './WhoDatFull.svelte';
 
@@ -108,9 +112,25 @@
 								<div>
 									at
 									{#if whoIsData.domain.created_date}
-										{format(whoIsData.domain.created_date, 'PPP')} (<strong
-											>{formatDistanceToNowStrict(whoIsData.domain.created_date)}</strong
-										>)
+										{format(whoIsData.domain.created_date, 'PPP')}
+										{#if differenceInYears(whoIsData.domain.created_date, new Date()) < 2}
+											(<Tooltip.Root openDelay={0}
+												><Tooltip.Trigger class="warning" style="font: inherit; border: none;"
+													><TablerAlertTriangle style="vertical-align: middle;" />
+													{formatDistanceToNowStrict(
+														whoIsData.domain.created_date
+													)}</Tooltip.Trigger
+												><Tooltip.Content
+													transition={fade}
+													transitionConfig={{ duration: 100 }}
+													class="tooltip-content"
+													><Tooltip.Arrow class="tooltip-arrow" />
+													<TablerAlertTriangle /> Newly registered domains have low reputation
+												</Tooltip.Content></Tooltip.Root
+											>)
+										{:else}
+											(<strong>{formatDistanceToNowStrict(whoIsData.domain.created_date)}</strong>)
+										{/if}
 									{:else}
 										???
 									{/if}
@@ -158,20 +178,61 @@
 			</div>
 		</div>
 	</div>
-	<div class="container">
+	<div class="container actions">
 		<div style="padding-top: 24px; display: flex; gap: 8px;">
-			<div
-				style="background-color: var(--theme-primary); color: var(--theme-background); padding: 24px; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 8px;"
-			>
-				<TablerAlertTriangle />
-				Report Abuse to Domain Registrar
-			</div>
-			<div
-				style="background-color: var(--theme-secondary); color: var(--theme-background); padding: 24px; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 8px;"
-			>
-				<TablerMail />
-				Report Abuse Email
-			</div>
+			<Tooltip.Root openDelay={0}>
+				<Tooltip.Trigger asChild let:builder>
+					<a
+						use:builder.action
+						{...builder}
+						style="background-color: var(--theme-primary); "
+						href="https://google.com/search?q={encodeURIComponent(
+							(whoIsData?.registrar?.name || whoIsData?.registrar?.organization) + ' report abuse'
+						)}&btnI"
+						target="_blank"
+					>
+						<TablerAlertTriangle />
+						Report Abuse to Domain Registrar
+					</a>
+				</Tooltip.Trigger>
+				<Tooltip.Content
+					class="tooltip-content"
+					transition={fade}
+					transitionConfig={{ duration: 100 }}
+				>
+					<Tooltip.Arrow class="tooltip-arrow" />
+					<img src="/assets/google-g.svg" width="18px" height="18px" alt="(G)" style="background-color: #fff; border-radius: 999px; padding: 2px;" />
+					<div>
+						How to report abuse to registrant: <strong
+							>{whoIsData?.registrar?.name || whoIsData?.registrar?.organization}</strong
+						>
+					</div>
+					<TablerExternalLink/>
+				</Tooltip.Content>
+			</Tooltip.Root>
+			<Tooltip.Root openDelay={0}>
+				<Tooltip.Trigger asChild let:builder>
+					<a
+						use:builder.action
+						{...builder}
+						style="background-color: var(--theme-secondary); "
+						href="mailto:{whoIsData?.registrar?.email}"
+						target="_blank"
+					>
+						<TablerMail />
+						Send a Report Abuse Email
+					</a>
+				</Tooltip.Trigger>
+				<Tooltip.Content
+					class="tooltip-content"
+					transition={fade}
+					transitionConfig={{ duration: 100 }}
+				>
+					<Tooltip.Arrow class="tooltip-arrow" />
+					<TablerMail />
+					<div>Open mail to: <strong>{whoIsData?.registrar?.email}</strong></div>
+				</Tooltip.Content>
+			</Tooltip.Root>
 		</div>
 	</div>
 </div>
@@ -231,7 +292,6 @@
 		}
 	}
 
-
 	.screenshot {
 		display: flex;
 		align-items: center;
@@ -257,6 +317,26 @@
 		gap: 16px;
 		.inner {
 			flex-grow: 1;
+		}
+	}
+
+	.actions {
+		a {
+			text-decoration: none;
+			color: #fff;
+
+			padding: 24px;
+			border-radius: 16px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			padding: 24px;
+			border-radius: 16px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
 		}
 	}
 </style>

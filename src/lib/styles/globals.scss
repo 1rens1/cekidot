@@ -149,3 +149,29 @@ a.underline-anchor {
 		}
 	}
 }
+
+.warning {
+	color: #df1627;
+	background-color: rgba(#df1627, 0.25);
+	border-radius: 4px;
+}
+
+.tooltip-content {
+	background-color: var(--theme-background);
+	border: 1px solid #777;
+	border-radius: 16px;
+	padding: 12px 14px;
+	box-shadow: 0 4px 8px rgba(#000, 0.25);
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+
+	.tooltip-arrow {
+		border-radius: 2px;
+		border-left: 1px solid;
+		border-top: 1px solid;
+		border-color: #777;
+	}
+}
