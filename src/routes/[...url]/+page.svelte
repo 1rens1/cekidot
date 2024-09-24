@@ -206,7 +206,7 @@
 		<ScanResult url={urlPath} />
 	</div>
 	<div class="container actions" style="padding-top: 0;">
-		<div style="display: flex; gap: 8px;">
+		<div style="display: flex; gap: 8px; flex-wrap: wrap;">
 			<Tooltip.Root openDelay={0}>
 				<Tooltip.Trigger asChild let:builder>
 					<a
