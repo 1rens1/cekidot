@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import CekidotLogo from '$lib/components/CekidotLogo.svelte';
 	import UrlBar from '$lib/components/URLBar.svelte';
-	import { addToast, openFirstLink } from '$lib/stores';
+	import { addToast, openFirstLink, scanScore } from '$lib/stores';
 	import { Tooltip } from 'bits-ui';
 	import { format } from 'date-fns';
 	import { formatDistanceToNowStrict } from 'date-fns/formatDistanceToNowStrict';
@@ -76,6 +76,14 @@
 			console.error(error);
 		}
 	}
+	$: finalScore =
+		Math.max($scanScore -
+		(whoIsData &&
+		whoIsData.domain &&
+		whoIsData.domain.created_date &&
+		differenceInYears(whoIsData.domain.created_date, new Date()) < 2
+			? 20
+			: 0), 0);
 </script>
 
 <div class="wrapper">
@@ -88,11 +96,25 @@
 		</div>
 	</header>
 	<div class="container" style="padding-bottom: 0;">
-		<h1 class="hostname">
-			{#key url.hostname}
-				<img src="https://favicone.com/{url.hostname}?s=32" alt={url.hostname} />
-			{/key}
-			{url.hostname}
+		<h1 class="top">
+			<div class="hostname">
+				{#key url.hostname}
+					<img src="https://favicone.com/{url.hostname}?s=32" alt={url.hostname} />
+				{/key}
+				{url.hostname}
+			</div>
+			<Tooltip.Root openDelay={0}>
+				<Tooltip.Trigger
+					class="score"
+					data-type={finalScore <= 60 ? 'red' : finalScore <= 80 ? 'yellow' : 'green'}
+				>
+					{Math.round(finalScore)}
+				</Tooltip.Trigger>
+				<Tooltip.Content class="tooltip-content" align="end">
+					<Tooltip.Arrow class="tooltip-arrow" />
+					Score is evaluated from domain creation date and scan results
+				</Tooltip.Content>
+			</Tooltip.Root>
 		</h1>
 	</div>
 	<div class="container">
@@ -179,11 +201,12 @@
 			</div>
 		</div>
 	</div>
-	<div class="container">
+	<div class="container" style="padding-top: 0;">
+		<h2 class="legend">Scan result</h2>
 		<ScanResult url={urlPath} />
 	</div>
-	<div class="container actions">
-		<div style="padding-top: 24px; display: flex; gap: 8px;">
+	<div class="container actions" style="padding-top: 0;">
+		<div style="display: flex; gap: 8px;">
 			<Tooltip.Root openDelay={0}>
 				<Tooltip.Trigger asChild let:builder>
 					<a
@@ -194,6 +217,7 @@
 							(whoIsData?.registrar?.name || whoIsData?.registrar?.organization) + ' report abuse'
 						)}{$openFirstLink ? '&btnI' : ''}"
 						target="_blank"
+						class:attention={finalScore <= 80}
 					>
 						<TablerAlertTriangle />
 						Report Abuse to Domain Registrar
@@ -292,9 +316,61 @@
 			}
 		}
 	}
-	.hostname {
+
+	.top {
+		position: relative;
 		margin: 0;
-		font-size: 48px;
+		.hostname {
+			font-size: 48px;
+
+			@include is-mobile {
+				font-size: 32px;
+				img {
+					width: 24px;
+					height: 24px;
+				}
+			}
+		}
+
+		:global(.score) {
+			position: absolute;
+			top: 50%;
+			right: 0;
+			width: 80px;
+			height: 80px;
+			transform: translateY(-50%);
+			border-radius: 9999px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: 6px solid;
+			font: inherit;
+
+			@include is-mobile {
+				border-width: 4px;
+				font-size: 24px;
+				width: 60px;
+				height: 60px;
+			}
+		}
+		:global(.score[data-type='green']) {
+			$color: #26db47;
+			border-color: rgba($color, 0.25);
+			color: $color;
+			background-color: rgba($color, 0.25);
+		}
+		:global(.score[data-type='yellow']) {
+			$color: #fcc30a;
+			border-color: rgba($color, 0.25);
+			color: $color;
+			background-color: rgba($color, 0.25);
+		}
+		:global(.score[data-type='red']) {
+			$color: #df1627;
+			border-color: rgba($color, 0.25);
+			color: $color;
+			background-color: rgba($color, 0.25);
+		}
 	}
 
 	:global(.box) {
@@ -352,6 +428,26 @@
 			align-items: center;
 			justify-content: center;
 			gap: 8px;
+		}
+
+		.attention {
+			animation: attention 6s infinite;
+			animation-delay: 2s;
+
+			@keyframes attention {
+				0% {
+					transform: scale(1);
+				}
+				5% {
+					transform: scale(1.05);
+				}
+				10% {
+					transform: scale(1);
+				}
+				100% {
+					transform: scale(1);
+				}
+			}
 		}
 	}
 </style>
