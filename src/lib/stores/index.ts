@@ -1,4 +1,5 @@
 import { uuidv4 } from '$lib';
+import { persisted } from 'svelte-persisted-store';
 import { writable } from 'svelte/store';
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
@@ -21,3 +22,8 @@ export const addToast = (toast: Optional<Toast, 'id'>) => {
 export const dismissToast = (id: string) => {
 	toasts.update((all) => all.filter((t) => t.id !== id));
 };
+
+export const OPENFIRSTLINK_KEY = 'cekidot.openfirstlink'
+export const openFirstLink = persisted(OPENFIRSTLINK_KEY, true)
+
+export const scanScore = writable<number>(100);

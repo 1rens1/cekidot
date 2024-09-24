@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import CekidotLogo from '$lib/components/CekidotLogo.svelte';
 	import UrlBar from '$lib/components/URLBar.svelte';
-	import { addToast } from '$lib/stores';
+	import { addToast, openFirstLink } from '$lib/stores';
 	import { Tooltip } from 'bits-ui';
 	import { format } from 'date-fns';
 	import { formatDistanceToNowStrict } from 'date-fns/formatDistanceToNowStrict';
@@ -13,6 +13,7 @@
 	import TablerExternalLink from '~icons/tabler/external-link';
 	import Screenshot from './Screenshot.svelte';
 	import WhoDatFull from './WhoDatFull.svelte';
+	import ScanResult from './ScanResult.svelte';
 
 	$: urlPath = $page.params.url;
 	$: url = new URL($page.params.url);
@@ -178,6 +179,9 @@
 			</div>
 		</div>
 	</div>
+	<div class="container">
+		<ScanResult url={urlPath} />
+	</div>
 	<div class="container actions">
 		<div style="padding-top: 24px; display: flex; gap: 8px;">
 			<Tooltip.Root openDelay={0}>
@@ -188,7 +192,7 @@
 						style="background-color: var(--theme-primary); "
 						href="https://google.com/search?q={encodeURIComponent(
 							(whoIsData?.registrar?.name || whoIsData?.registrar?.organization) + ' report abuse'
-						)}&btnI"
+						)}{$openFirstLink ? '&btnI' : ''}"
 						target="_blank"
 					>
 						<TablerAlertTriangle />
@@ -201,13 +205,19 @@
 					transitionConfig={{ duration: 100 }}
 				>
 					<Tooltip.Arrow class="tooltip-arrow" />
-					<img src="/assets/google-g.svg" width="18px" height="18px" alt="(G)" style="background-color: #fff; border-radius: 999px; padding: 2px;" />
+					<img
+						src="/assets/google-g.svg"
+						width="18px"
+						height="18px"
+						alt="(G)"
+						style="background-color: #fff; border-radius: 999px; padding: 2px;"
+					/>
 					<div>
 						How to report abuse to registrant: <strong
 							>{whoIsData?.registrar?.name || whoIsData?.registrar?.organization}</strong
 						>
 					</div>
-					<TablerExternalLink/>
+					<TablerExternalLink />
 				</Tooltip.Content>
 			</Tooltip.Root>
 			<Tooltip.Root openDelay={0}>
@@ -233,6 +243,11 @@
 					<div>Open mail to: <strong>{whoIsData?.registrar?.email}</strong></div>
 				</Tooltip.Content>
 			</Tooltip.Root>
+		</div>
+		<div style="margin-top: 8px;">
+			<label
+				><input type="checkbox" bind:checked={$openFirstLink} /> Open the first link of search result</label
+			>
 		</div>
 	</div>
 </div>
@@ -282,13 +297,13 @@
 		font-size: 48px;
 	}
 
-	.box {
+	:global(.box) {
 		border-radius: 32px;
 		padding: 32px;
 		border: 1px solid #777;
 		position: relative;
 
-		.legend {
+		:global(.legend) {
 		}
 	}
 

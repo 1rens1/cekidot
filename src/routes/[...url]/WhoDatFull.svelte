@@ -43,6 +43,9 @@
 					</ul>
 				</div>
 			{/each}
+			<div style="margin-top: 8px; text-align: right;">
+				Powered by <a href="https://who-dat.as93.net/" target="_blank" rel="noopener noreferrer">Lissy93/who-dat</a>
+			</div>
 		</div>
 	</div>
 {/if}
@@ -145,6 +148,7 @@
 					display: flex;
 					justify-content: space-between;
 					gap: 8px;
+					word-break: break-word;
 
 					> span:first-child {
 						opacity: 0.8;

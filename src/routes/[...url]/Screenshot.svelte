@@ -105,6 +105,7 @@
 			user-select: none;
 			display: flex;
 			flex-direction: column;
+			transform-origin: top center;
 			$root: &;
 			@at-root {
 				@include theme('dark') {
