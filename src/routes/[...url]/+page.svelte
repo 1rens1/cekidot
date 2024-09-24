@@ -284,12 +284,20 @@
 		justify-content: center;
 		gap: 8px;
 
+		@include is-mobile {
+			flex-direction: column;
+		}
+
 		.logo {
 			padding: 8px;
 		}
 
 		.control {
 			flex-grow: 1;
+
+			@include is-mobile {
+				width: 100%;
+			}
 		}
 	}
 	.container {
