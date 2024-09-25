@@ -5,6 +5,8 @@
 
 	export let url: string;
 
+	const REFETCH_INTERVAL = 5000;
+
 	let scanners: { name: string; status: string }[] = [];
 	let generalScore = '. . .';
 
@@ -64,7 +66,7 @@
 				setTimeout(async () => {
 					await refetch(_url);
 					console.log('Refetching', res);
-				}, 2000);
+				}, REFETCH_INTERVAL);
 			}
 		} else {
 			addToast({ type: 'error', title: `${res.message} when scanning (${req.status})` });
@@ -85,7 +87,7 @@
 					setTimeout(async () => {
 						await refetch(url);
 						console.log('Refetching', res);
-					}, 2000);
+					}, 10_000);
 				}
 			} else {
 				addToast({ type: 'error', title: `${res.message} when scanning (${req.status})` });
@@ -108,8 +110,8 @@
 		);
 
 		statuses.forEach((s) => {
-			if (s.includes('suspicious')) result -= (1 / statuses.length) * 100 * 0.8 * 2;
-			if (s.includes('malicious')) result -= (1 / statuses.length) * 100 * 1 * 2;
+			if (s.includes('suspicious')) result -= (1 / statuses.length) * 100 * 0.6 * 2;
+			if (s.includes('malicious')) result -= (1 / statuses.length) * 100 * 0.8 * 2;
 		});
 
 		$scanScore = result;

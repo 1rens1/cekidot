@@ -76,14 +76,16 @@
 			console.error(error);
 		}
 	}
-	$: finalScore =
-		Math.max($scanScore -
-		(whoIsData &&
-		whoIsData.domain &&
-		whoIsData.domain.created_date &&
-		differenceInYears(whoIsData.domain.created_date, new Date()) < 2
-			? 20
-			: 0), 0);
+	$: finalScore = Math.max(
+		$scanScore -
+			(whoIsData &&
+			whoIsData.domain &&
+			whoIsData.domain.created_date &&
+			differenceInYears(whoIsData.domain.created_date, new Date()) < 2
+				? 20
+				: 0),
+		0
+	);
 </script>
 
 <div class="wrapper">
@@ -110,9 +112,36 @@
 				>
 					{Math.round(finalScore)}
 				</Tooltip.Trigger>
-				<Tooltip.Content class="tooltip-content" align="end">
+				<Tooltip.Content
+					class="tooltip-content"
+					align="end"
+					transition={fade}
+					transitionConfig={{ duration: 100 }}
+				>
 					<Tooltip.Arrow class="tooltip-arrow" />
-					Score is evaluated from domain creation date and scan results
+					<div>
+						<div>Score is evaluated by:</div>
+						<ul style="margin: 0;">
+							<li>Initial score: <strong>100</strong></li>
+							<li>
+								If domain is registered less than <strong>2 (two) years ago</strong>, deduct
+								<strong>20 points</strong>
+							</li>
+							<li>
+								For every scan result:
+								<ul>
+									<li>
+										If result is <strong>suspicious</strong>, deduct
+										<strong>1/scanners_amount * 100 * 0.6 * 2 points</strong>
+									</li>
+									<li>
+										If result is <strong>malicious</strong>, deduct
+										<strong>1/scanners_amount * 100 * 0.8 * 2 points</strong>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
 				</Tooltip.Content>
 			</Tooltip.Root>
 		</h1>
