@@ -72,6 +72,8 @@
 		}
 	};
 	const fetchScanResult = async (url: string) => {
+		generalScore = '. . .';
+		$scanScore = 100;
 		scanResponse = undefined;
 		const req = await fetch('/api/scan', { method: 'POST', body: JSON.stringify({ url }) });
 
