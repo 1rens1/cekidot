@@ -12,7 +12,12 @@
 					target="_blank"
 					rel="noopener noreferrer"
 					class="underline-anchor">rens</a
-				>, 2024.
+				>, 2024. Source code: <a
+					href="https://github.com/1rens1/cekidot"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="underline-anchor">GitHub</a
+				>.
 			</div>
 			<ThemeSwitcher />
 		</div>
