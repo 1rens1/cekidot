@@ -195,7 +195,7 @@
 						{#if whoIsData.registrant}
 							<h3 style="margin: 0;margin-top: 0.5em;">
 								<span style="font-weight: 600;">Organization:</span>
-								{whoIsData.registrant.organization || '???'}
+								{whoIsData.registrant.organization || whoIsData.registrant.name || '???'}
 							</h3>
 						{/if}
 					{:else}
