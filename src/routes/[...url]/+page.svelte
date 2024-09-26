@@ -131,6 +131,10 @@
 								For every scan result:
 								<ul>
 									<li>
+										If result is <strong>unsure</strong>, deduct
+										<strong>1/scanners_amount * 100 * 0.1 * 2 points</strong>
+									</li>
+									<li>
 										If result is <strong>suspicious</strong>, deduct
 										<strong>1/scanners_amount * 100 * 0.6 * 2 points</strong>
 									</li>

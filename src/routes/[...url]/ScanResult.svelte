@@ -110,6 +110,7 @@
 		);
 
 		statuses.forEach((s) => {
+			if (s.includes('unsure')) result -= (1 / statuses.length) * 100 * 0.1 * 2;
 			if (s.includes('suspicious')) result -= (1 / statuses.length) * 100 * 0.6 * 2;
 			if (s.includes('malicious')) result -= (1 / statuses.length) * 100 * 0.8 * 2;
 		});
