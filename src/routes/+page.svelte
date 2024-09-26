@@ -18,6 +18,7 @@
 		display: grid;
 		place-items: center;
 		position: relative;
+		padding: 16px;
 	}
 
 	.container {
@@ -28,6 +29,7 @@
 		width: 100%;
 		:global(.cekidot-logo) {
 			margin-bottom: 32px;
+			width: 100%;
 		}
 	}
 
