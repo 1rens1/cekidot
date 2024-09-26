@@ -87,7 +87,7 @@
 					setTimeout(async () => {
 						await refetch(url);
 						console.log('Refetching', res);
-					}, 10_000);
+					}, 3000);
 				}
 			} else {
 				addToast({ type: 'error', title: `${res.message} when scanning (${req.status})` });
